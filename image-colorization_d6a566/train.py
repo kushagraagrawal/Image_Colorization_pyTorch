@@ -9,10 +9,8 @@ from colorize_data import ColorizeData, getTrainValData, make_dataloaders,Averag
 import argparse
 from PIL import Image
 
-from temp_model import ColorNet
-
-parser = argparse.ArgumentParser(description='Training and Using ColorNet')
-parser.add_argument('data', default='../landscape_images/',metavar='DIR', help='path to dataset')
+parser = argparse.ArgumentParser(description='Training and Using ResNet')
+parser.add_argument('--data', default='../landscape_images/',metavar='DIR', help='path to dataset')
 parser.add_argument('-j', '--workers', default=0, type=int, metavar='N', help='number of data loading workers (default: 0)')
 parser.add_argument('--resume', default='', type=str, metavar='PATH', help='path to .pth file checkpoint (default: none)')
 parser.add_argument('--epochs', default=50, type=int, metavar='N', help='number of total epochs to run')
@@ -123,35 +121,14 @@ class Trainer:
             print('Finished validation.')
             return losses.avg
 
-    def inference(self,image, PATH):
-        from torchvision.utils import save_image
-        model = Net()
-        model_checkpoint = torch.load(PATH, map_location=lambda storage, loc: storage)
-        model.load_state_dict(model_checkpoint['state_dict'])
-        model.eval()
-
-        input_image = Image.open(image)
-        infer_transform = transforms.Compose([transforms.Resize(size=(256,256)),
-                                              transforms.Grayscale(),
-                                              transforms.ToTensor(),
-                                              transforms.Normalize((0.5), (0.5))
-                                            ])
-        input_image = infer_transform(input_image).float()
-        input_image = input_image.unsqueeze(0)
-
-        outputs = model(input_image)
-        saveFileName = image.split('.')
-        save_image(outputs, saveFileName[0] + '_inference.' + saveFileName[1])
-
-
 best_losses = 1000.0
 use_gpu = torch.cuda.is_available()
 def main():
     global args, best_losses
     args = parser.parse_args()
     print('Arguments: {}'.format(args))
-
-    trainer = Trainer()
+    if(args.inference == False):
+        trainer = Trainer()
 
     if(use_gpu):
         trainer.model.cuda()
@@ -184,7 +161,28 @@ def main():
                 'optimizer': trainer.optimizer.state_dict(),
             }, is_best_so_far, 'checkpoints/checkpoint-epoch-{}.pth.tar'.format(epoch))
     else:
-        trainer.inference(args.inferimage, args.infercheckpoint)
+        inference(args.inferimage, args.infercheckpoint)
+
+def inference(image, PATH):
+    from torchvision.utils import save_image
+    model = Net()
+    model_checkpoint = torch.load(PATH, map_location=lambda storage, loc: storage)
+    model.load_state_dict(model_checkpoint['state_dict'])
+    model.eval()
+
+    input_image = Image.open(image)
+    infer_transform = transforms.Compose([transforms.Resize(size=(256,256)),
+                                          transforms.Grayscale(),
+                                          transforms.ToTensor(),
+                                          transforms.Normalize((0.5), (0.5))
+                                          ])
+    input_image = infer_transform(input_image).float()
+    input_image = input_image.unsqueeze(0)
+
+    outputs = model(input_image)
+    saveFileName = image.split('.')
+    save_image(outputs, saveFileName[0] + '_inference.' + saveFileName[1])
+
 
 if __name__ == '__main__':
     main()

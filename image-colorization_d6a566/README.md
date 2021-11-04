@@ -33,5 +33,37 @@ You are tasked to control the average color/mood of the image that you are color
 - Once you are done, zip the code, upload your solution.  
 
 ## Instructions
-- Provide path to the pretrained model included for inference
-- For training the code, run python train.py 
+- Use the below command to train the network from scratch
+`python train.py $path_to_image_dir$ --epochs $Num_of_epochs$`
+- Please use the below argument parsers commands to include required hyperparameters
+```
+usage: train.py [-h] [-j N] [--resume PATH] [--epochs N] [--start-epoch N]
+                [-b N] [--lr LR] [--weight-decay W] [-e] [--print-freq N]
+                [--inference N] [--infercheckpoint N] [--inferimage N]
+                DIR
+
+Training and Using ResNet
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --data DIR            path to dataset
+  -j N, --workers N     number of data loading workers (default: 0)
+  --resume PATH         path to .pth file checkpoint (default: none)
+  --epochs N            number of total epochs to run
+  --start-epoch N       manual epoch number (overridden if loading from
+                        checkpoint)
+  -b N, --batch-size N  size of mini-batch (default: 16)
+  --lr LR, --learning-rate LR
+                        learning rate at start of training
+  --weight-decay W, --wd W
+                        weight decay (default: 1e-4)
+  -e, --evaluate        use this flag to validate without training
+  --print-freq N, -p N  print frequency (default: 10)
+  --inference N, -i N   perform inference
+  --infercheckpoint N   saved model checkpoint
+  --inferimage N        image to be inferred
+
+```
+- After training is complete, you can run train.py to run inference on a single image as below <br>
+`python train.py --inference True inferimage $PATH_TO_IMAGE$` <br>
+It dumps an image in the same path with the suffix _inference

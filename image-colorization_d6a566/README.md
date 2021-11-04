@@ -31,3 +31,7 @@ You are tasked to control the average color/mood of the image that you are color
 - Document the things you tried, what worked and did not. 
 - Update this README.md file to add instructions on how to run your code. (train, inference). 
 - Once you are done, zip the code, upload your solution.  
+
+## Instructions
+- Provide path to the pretrained model included for inference
+- For training the code, run python train.py 

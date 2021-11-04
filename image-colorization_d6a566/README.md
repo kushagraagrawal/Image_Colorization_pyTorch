@@ -32,6 +32,13 @@ You are tasked to control the average color/mood of the image that you are color
 - Update this README.md file to add instructions on how to run your code. (train, inference). 
 - Once you are done, zip the code, upload your solution.  
 
+## Methodology
+- After filling the required dataloader, loss function and optimizer, I trained the code on 4000 random images from the dataset. With 3500 as training images and 500 as validation. Due to a dearth of computational resources, I was only able to train the network for 5 epochs on my laptop.
+- Metric used for this task - **Mean Squared Error**. I treated Image Colorization as effectively a classification task as we are trying to find the right colours for the image and comparing against the target in the code. Since MSE loss is known to work well for classification tasks, I chose that metric.
+
+## Scope For Future Improvement
+- While the ResNet gave promising results after only 5 epochs of training, more sophisticated models can be used to generate better colourization outputs. One particularly interesting implementation I came across utilised [UNet and GAN's](https://colab.research.google.com/drive/1uvIUFwOIWBfBs0jdBcztJHPhoZiDUTNR?usp=sharing). I hope to explore this implementation in greater detail in the future to derive valuable insights into the image colorization task 
+
 ## Instructions
 - Use the below command to train the network from scratch
 `python train.py $path_to_image_dir$ --epochs $Num_of_epochs$`

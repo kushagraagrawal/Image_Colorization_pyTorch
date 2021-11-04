@@ -1,3 +1,8 @@
 landscape_images/
 temp.py
 .DS_Store
+image-colorization_d6a566/outputs/
+image-colorization_d6a566/checkpoints/
+image-colorization_d6a566/__pycache__/
+landscape_images_c/
+landscape_images_c.zip
